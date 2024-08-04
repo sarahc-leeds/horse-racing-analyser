@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2",
+    "request": "^2.88.2"
+  },
+  "name": "horse-racing-app",
+  "version": "1.0.0",
+  "description": "Get data from the horse racing API",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarahc-leeds/horse-racing.git"
+  },
+  "keywords": [
+    "horse",
+    "api"
+  ],
+  "author": "Sarah Curtis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sarahc-leeds/horse-racing/issues"
+  },
+  "homepage": "https://github.com/sarahc-leeds/horse-racing#readme"
+}
