@@ -81,7 +81,7 @@ async function analyzeRacecard(racecard) {
   try {
     const completion = await openai.chat.completions.create({
       messages: [{ role: "system", content: prompt }],
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
     });
 
     return completion.choices[0].message.content;
@@ -96,14 +96,16 @@ async function getYankeeBetSuggestion(runnersInfo) {
     apiKey: process.env.OPENAI_API_KEY,
   });
 
-  const prompt = `I have all the runners from each racecourse today, and would like to pick a yankee bet which contains 4 horses. Based on the info given on the horse runners of this racecourse, which 4 horses would you suggest should go in a yankee bet and could win? ${JSON.stringify(
+  const prompt = `I have all the runners from each racecourse today, and would like to pick a yankee bet which contains 4 horses from 4 different races at the given racecourse. Based on the info given on the horse runners of this racecourse, which 4 horses would you suggest should go in a yankee bet and could win? ${JSON.stringify(
     runnersInfo
   )}`;
 
   try {
     const completion = await openai.chat.completions.create({
-      messages: [{ role: "system", content: prompt }],
-      model: "gpt-3.5-turbo",
+      messages: [{ role: "system", content: "You will be provided with data from a horse racing API for different races. Carefully read through the data and make a decision on what to suggest to the user based on this information"}, 
+        {role: "user", content: prompt}
+      ],
+      model: "gpt-4o-mini",
     });
 
     return completion.choices[0].message.content;
