@@ -1,0 +1,27 @@
+# Create a docker compose file which will create a container for the app and use the mongo version 8 docker image for the database. The app should be able to connect to the database.
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dogracing
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URL: "mongodb://mongo:27017"
+      MONGO_DB: "dogracing"
+      MONGO_USER: "mongoadmin"
+      MONGO_PASSWORD: "secret"
+    volumes:
+      - .:/app
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "mongoadmin"
+      MONGO_INITDB_ROOT_PASSWORD: "secret"
+      MONGO_INITDB_DATABASE: "dogracing"
