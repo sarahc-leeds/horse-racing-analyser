@@ -1,0 +1,29 @@
+/* Add this to your existing CSS file or within a <style> tag in your HTML */
+#yankee-bet-section {
+    text-align: center;
+    margin: 20px 0;
+}
+
+#yankee-bet-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+#yankee-bet-button:hover {
+    background-color: #0056b3;
+}
+
+#yankee-bet-result {
+    margin-top: 10px;
+    font-size: 18px;
+}
+
+#course-dropdown {
+    padding: 10px;
+    font-size: 16px;
+}

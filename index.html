@@ -1,18 +1,65 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>Dog Predictions</title>
-</head>
-<body>
-    <h1>Enter the dog race and time below</h1>
+<html lang="en">
 
-    <form action="http://127.0.0.1:3000" method="POST">
-        <label for="racetrack">Racetrack:</label>
-        <input type="text" id="racetrack" name="racetrack" required><br><br>
-        <label for="time">Time:</label>
-        <input type="text" id="time" name="time" required><br><br>
-        <input type="submit" value="Submit">
-    </form>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Racecards</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="bg-secondary text-white text-center py-3 mb-4">
+        <h1>Racecards</h1>
+    </header>
+
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col text-center">
+                <button id="fetchRacecards" class="btn btn-primary">Fetch Racecards</button>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col">
+                <select id="racecardsDropdown" class="form-control">
+                    <option value="">Select a racecard</option>
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col text-center">
+                <button id="analyzeRacecard" class="btn btn-success">Analyze Racecard</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div id="analysisResult" class="alert alert-info" role="alert"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                <h2>Yankee Bet</h2>
+                    <section id="course-selection-section">
+                        <select id="course-dropdown">
+                            <option value="">Select a course</option>
+                        </select>
+                        <button id="yankee-bet-button">Get Yankee Bet Suggestion</button>
+                        <div id="yankee-bet-result"></div>
+                    </section>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scripts.js"></script>
 
 </body>
+
 </html>
