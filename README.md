@@ -2,6 +2,13 @@
 
 This project contains a simple frontend script that interacts with a backend service to fetch Yankee bet suggestions based on the selected course from a dropdown menu.
 
+## Requirements
+
+- An open AI account and an API key
+- A free account on theracingapi.com website and an API key
+
+For this code to work, you'll need to add your API key info into to .env file (rename .env.example).
+
 ## Features
 
 - **Course Selection**: Users can select a course from a dropdown menu.
