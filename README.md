@@ -1,6 +1,8 @@
-# Yankee Bet Suggestion Frontend
+# Horse Racing Analyser and Yankee Bet Suggestion
 
-This project contains a simple frontend script that interacts with a backend service to fetch Yankee bet suggestions based on the selected course from a dropdown menu.
+This project contains a simple frontend script that interacts with a backend service to analyse horses using theracingapi.com information, and also fetch Yankee bet suggestions based on the selected course from a dropdown menu (also by using theracingapi).
+
+It was a bit of fun for me to learn more code. Forgive the CSS styling and frontend skills - they obviously need more work! :smiley:
 
 ## Requirements
 
@@ -11,28 +13,13 @@ For this code to work, you'll need to add your API key info into to .env file (r
 
 ## Features
 
-- **Course Selection**: Users can select a course from a dropdown menu.
-- **Fetch Yankee Bet Suggestion**: Upon clicking a button, the selected course is sent to the backend to fetch a Yankee bet suggestion.
-- **Display Suggestion**: The fetched suggestion is displayed on the webpage.
+Horse Analyser
 
-## How It Works
+- First fetch all racecards for that day
+- Select a race from the dropdown and Analyse the race, it will suggest 2 horses based on form/race going and jockey info
 
-1. **Course Selection**:
+Yankee Bet Suggestion
 
-   - The user selects a course from a dropdown menu with the ID `course-dropdown`.
-   - The selected course value is stored in the `selectedCourse` variable.
-
-2. **Fetch Suggestion**:
-
-   - When the user clicks the button with the ID `yankee-bet-button`, a POST request is sent to the backend endpoint `http://localhost:3000/get-yankee-bet-suggestion`.
-   - The request body contains the selected course in JSON format.
-
-3. **Display Suggestion**:
-   - The response from the backend is parsed, and the suggestion is displayed in an element with the ID `yankee-bet-result`.
-
-## Usage
-
-1. Open the HTML file (using live view in VScode)
-2. Select a course from the dropdown menu.
-3. Click the "Get Yankee Bet Suggestion" button.
-4. View the suggestion displayed on the page.
+- **Course Selection**: Users can select a course from a dropdown menu - the drop down is populated on page load
+- **Fetch Yankee Bet Suggestion**:  The selected course is sent to the backend to fetch a Yankee bet suggestion.
+- **Display Suggestion**: The fetched suggestion is displayed on the webpage, with contextual information 
