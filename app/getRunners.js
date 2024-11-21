@@ -1,15 +1,121 @@
+const dotenv = require("dotenv");
 const express = require("express");
-const {
-  getRacecardsForCourses,
-  getRunnersForCourse,
-  getCourseNames,
-  analyzeRacecard,
-  getYankeeBetSuggestion,
-} = require("./utils");
+const axios = require("axios");
+const cors = require("cors");
+const OpenAI = require("openai");
 
-const router = express.Router();
+dotenv.config();
 
-router.get("/load-todays-racecards", async (req, res) => {
+const app = express();
+const port = 3000;
+
+app.use(cors()); // Enable CORS for all routes
+app.use(express.json()); // To parse JSON bodies
+
+const raceCardUrl = "https://api.theracingapi.com/v1/racecards/free";
+const headers = {
+  Authorization:
+    "Basic " +
+    Buffer.from(
+      process.env.API_USERNAME + ":" + process.env.API_PASSWORD
+    ).toString("base64"),
+};
+
+async function getRacecardsForCourses() {
+  try {
+    const response = await axios.get(raceCardUrl, {
+      params: {
+        region_codes: "gb",
+      },
+      headers,
+    });
+    return response.data.racecards;
+  } catch (error) {
+    console.error(`Error fetching racecards for course IDs:`, error);
+    throw error;
+  }
+}
+
+function getRunnersForCourse(racecards, courseName) {
+  // Filter racecards for the specified course
+  const filteredRacecards = racecards.filter(
+    (racecard) => racecard.course === courseName
+  );
+
+  // Extract and aggregate runners
+  const allRunners = filteredRacecards.reduce((acc, racecard) => {
+    return acc.concat(racecard.runners);
+  }, []);
+
+  // Create the new object with course name and aggregated runners
+  const result = {
+    course: courseName,
+    allRunnersfromEveryRace: allRunners,
+  };
+
+  return result;
+}
+
+async function getCourseNames() {
+  try {
+    const racecards = await getRacecardsForCourses();
+    const courseNames = [
+      ...new Set(racecards.map((racecard) => racecard.course)),
+    ];
+    return courseNames;
+  } catch (error) {
+    console.error("Error getting course names:", error);
+    throw error;
+  }
+}
+
+async function analyzeRacecard(racecard) {
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
+  const prompt = `I have the following racecard details for a race in the UK, take into account the going and jockeys if possible. Don't output the analyse of each runner but just give me a summary at the very end of your top 2 recommended runners which could win, based on the conditions and details given: ${JSON.stringify(
+    racecard
+  )}`;
+
+  try {
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: "system", content: prompt }],
+      model: "gpt-4o-mini",
+    });
+
+    return completion.choices[0].message.content;
+  } catch (error) {
+    console.error("Error analyzing racecard with OpenAI:", error);
+    throw error;
+  }
+}
+
+async function getYankeeBetSuggestion(runnersInfo) {
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
+  const prompt = `I have all the runners from each racecourse today, and would like to pick a yankee bet which contains 4 horses from 4 different races at the given racecourse. Based on the info given on the horse runners of this racecourse, which 4 horses would you suggest should go in a yankee bet and could win? ${JSON.stringify(
+    runnersInfo
+  )}`;
+
+  try {
+    const completion = await openai.chat.completions.create({
+      messages: [{ role: "system", content: "You will be provided with data from a horse racing API for different races. Carefully read through the data and make a decision on what to suggest to the user based on this information"}, 
+        {role: "user", content: prompt}
+      ],
+      model: "gpt-4o-mini",
+    });
+
+    return completion.choices[0].message.content;
+  } catch (error) {
+    console.error("Error getting Yankee bet suggestion with OpenAI:", error);
+    throw error;
+  }
+}
+
+app.get("/load-todays-racecards", async (req, res) => {
   try {
     const racecards = await getRacecardsForCourses();
     res.json(racecards);
@@ -18,7 +124,7 @@ router.get("/load-todays-racecards", async (req, res) => {
   }
 });
 
-router.post("/analyze-racecard", async (req, res) => {
+app.post("/analyze-racecard", async (req, res) => {
   const { racecard } = req.body;
   try {
     const analysis = await analyzeRacecard(racecard);
@@ -28,9 +134,10 @@ router.post("/analyze-racecard", async (req, res) => {
   }
 });
 
-router.post("/get-yankee-bet-suggestion", async (req, res) => {
+app.post("/get-yankee-bet-suggestion", async (req, res) => {
   try {
     const racecards = await getRacecardsForCourses();
+    console.log(req.body.course);
     const runnersInfo = getRunnersForCourse(racecards, req.body.course);
     const suggestion = await getYankeeBetSuggestion(runnersInfo);
     res.json({ suggestion });
@@ -41,7 +148,7 @@ router.post("/get-yankee-bet-suggestion", async (req, res) => {
   }
 });
 
-router.get("/get-course-names", async (req, res) => {
+app.get("/get-course-names", async (req, res) => {
   try {
     const courseNames = await getCourseNames();
     res.json(courseNames);
@@ -51,4 +158,6 @@ router.get("/get-course-names", async (req, res) => {
   }
 });
 
-module.exports = router;
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});

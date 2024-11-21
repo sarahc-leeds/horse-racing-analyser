@@ -23,3 +23,12 @@ Yankee Bet Suggestion
 - **Course Selection**: Users can select a course from a dropdown menu - the drop down is populated on page load
 - **Fetch Yankee Bet Suggestion**:  The selected course is sent to the backend to fetch a Yankee bet suggestion.
 - **Display Suggestion**: The fetched suggestion is displayed on the webpage, with contextual information 
+
+## Usage
+
+```bash
+# Run the nodejs app
+node app/getRunners.js
+```
+
+Run live server from within vscode.
