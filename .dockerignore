@@ -1,0 +1,11 @@
+# Add vscode settings
+.vscode
+
+node_modules
+Dockerfile
+docker-compose.yml
+public
+.env
+
+README.md
+.gitignore
